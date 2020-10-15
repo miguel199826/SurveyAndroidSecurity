@@ -68,6 +68,7 @@ public class SystemAppsFragment extends Fragment {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private List<AppList> getInstalledApps() {
         PackageManager pm = getActivity().getApplicationContext().getPackageManager();
         List<AppList> apps = new ArrayList<AppList>();
@@ -81,8 +82,11 @@ public class SystemAppsFragment extends Fragment {
                 for (int i = 0; i < packs.size(); i++) {
                     PackageInfo p = packs.get(i);
                     if ((isSystemPackage(p))) {
+
+
                         String appName = p.applicationInfo.loadLabel(getContext().getPackageManager()).toString();
                         Drawable icon = p.applicationInfo.loadIcon(getContext().getPackageManager());
+                        System.out.println("ICON "+icon +"  "+ appName +" "+      p.applicationInfo.category);
                         String packages = p.applicationInfo.packageName;
                         //System.out.println(icon+":  "+packages);
                         apps.add(new AppList(appName,icon,"---",packages));
@@ -139,6 +143,7 @@ public class SystemAppsFragment extends Fragment {
         }
         private class ValueFilter extends Filter {
             //Invoked in a worker thread to filter the data according to the constraint.
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 System.out.println("EL TEXTO ESCRITO ES PERFORM... "+constraint);
@@ -226,7 +231,8 @@ public class SystemAppsFragment extends Fragment {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fr_simple_card, null);
@@ -237,6 +243,7 @@ public class SystemAppsFragment extends Fragment {
         userInstalledApps = (ListView) v.findViewById(R.id.LVApp);
         System.out.println("ky"+userInstalledApps);
         installedApps = getInstalledApps();
+
         installedAppsUpdate = getInstalledApps();
         installedAppAdapter = new AppAdapter(getContext(), installedApps);
         System.out.println("linares .i." + installedApps.size());

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressLint("ValidFragment")
-public class SimpleCardFragment extends Fragment {
+public class UserAppsFragment extends Fragment {
     private String mTitle;
     int nts=0;
 
@@ -46,12 +46,12 @@ public class SimpleCardFragment extends Fragment {
     Context contexto;
     ListView userInstalledApps;
 
-    public SimpleCardFragment() {
+    public UserAppsFragment() {
     }
 
-    public static SimpleCardFragment getInstance(String title) {
+    public static UserAppsFragment getInstance(String title) {
 
-        SimpleCardFragment sf = new SimpleCardFragment();
+        UserAppsFragment sf = new UserAppsFragment();
        // sf.mTitle = title;
         return sf;
     }
@@ -247,12 +247,18 @@ public class SimpleCardFragment extends Fragment {
         userInstalledApps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                final int position= adapterView.getVerticalScrollbarPosition();
+
+
+               // userInstalledApps.setSelection(i);
+
                 CharSequence[] cs = new CharSequence[5];
                 cs[0] = " Nivel 1";
                 cs[1] = " Nivel 2";
                 cs[2] = " Nivel 3";
                 cs[3] = " Nivel 4";
                 cs[4] = " Nivel 5";
+
                 final AppList app= installedApps.get(i);
                 AlertDialog.Builder builder = new AlertDialog.Builder((getContext()));
                 builder.setTitle("Seleccione el nivel de criticidad para la aplicación: ").setItems(cs , new DialogInterface.OnClickListener() {
@@ -261,14 +267,22 @@ public class SimpleCardFragment extends Fragment {
                                 which++;
                                 Toast.makeText(getContext(), app.getName() + " agregado con criticidad " + which, Toast.LENGTH_SHORT).show();
                                 //GuardarListaApp();
-                                installedAppAdapter = new AppAdapter(getContext(), installedApps);
+
                                 ActualizarListaApps(app.getPackaganame(),which,i,app.getName(),app.getIcon());
+                                installedAppAdapter = new AppAdapter(getContext(), installedApps);
                                 userInstalledApps.setAdapter(installedAppAdapter);
+                               // userInstalledApps.setSelection(position);
+
 
                             }
                         }
                 );
-                builder.show();
+             //   builder.show();
+
+
+               userInstalledApps.setAdapter(installedAppAdapter);
+                userInstalledApps.setSelection(position);
+
             }
         });
 

@@ -19,22 +19,21 @@ import com.dueeeke.tablayout.widget.MsgView;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class CommonTabActivity extends AppCompatActivity {
+public class AppListActivity extends AppCompatActivity {
     private Context mContext = this;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private ArrayList<Fragment> mFragments2 = new ArrayList<>();
 
-    private String[] mTitles = {"UserApps", "SystemApps"};
+
+    private String[] mTitles = {"Social", "Juegos", "Multimedia", "Productividad","Otros"};
     private int[] mIconUnselectIds = {
-            R.mipmap.tab_home_unselect, R.mipmap.tab_speech_unselect,
-            R.mipmap.tab_contact_unselect, R.mipmap.tab_more_unselect};
+            R.drawable.ic_u_social_icon, R.drawable.ic_u_games_icon,
+            R.drawable.ic_u_multimedia_icon, R.drawable.ic_u_office_icon,R.drawable.ic_u_games_icon};
     private int[] mIconSelectIds = {
-            R.mipmap.tab_home_select, R.mipmap.tab_speech_select,
-            R.mipmap.tab_contact_select, R.mipmap.tab_more_select};
+            R.drawable.ic_social_icon, R.drawable.ic_games_icon,
+            R.drawable.ic_multimedia_icon, R.drawable.ic_office_icon, R.drawable.ic_otros_icon};
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private View mDecorView;
     private ViewPager mViewPager;
-    private CommonTabLayout mTabLayout_1;
     private CommonTabLayout mTabLayout_2;
 
 
@@ -44,8 +43,12 @@ public class CommonTabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_common_tab);
 
 
-            mFragments.add(SimpleCardFragment.getInstance( "UserApps"));
+            mFragments.add(UserAppsFragment.getInstance( "UserApps"));
         mFragments.add(SystemAppsFragment.getInstance( "SystemApps"));
+        mFragments.add(SystemAppsFragment.getInstance( "SystemApps"));
+        mFragments.add(SystemAppsFragment.getInstance( "SystemApps"));
+        mFragments.add(SystemAppsFragment.getInstance( "SystemApps"));
+
            // mFragments2.add(SimpleCardFragment.getInstance("Switch Fragment " + title));
 
 
@@ -56,7 +59,9 @@ public class CommonTabActivity extends AppCompatActivity {
 
         mDecorView = getWindow().getDecorView();
         mViewPager = ViewFindUtils.find(mDecorView, R.id.vp_2);
+
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+
         /** with nothing */
 
         /** with ViewPager */
@@ -75,22 +80,22 @@ public class CommonTabActivity extends AppCompatActivity {
 
 
         //两位数
-        mTabLayout_2.showMsg(0, 55);
-        mTabLayout_2.setMsgMargin(0, -5, 5);
+      //  mTabLayout_2.showMsg(0, 55);
+       // mTabLayout_2.setMsgMargin(0, -5, 5);
 
         //三位数
-        mTabLayout_2.showMsg(1, 100);
-        mTabLayout_2.setMsgMargin(1, -5, 5);
+      //  mTabLayout_2.showMsg(1, 100);
+      //  mTabLayout_2.setMsgMargin(1, -5, 5);
 
         //设置未读消息红点
-        mTabLayout_2.showDot(2);
+      //  mTabLayout_2.showDot(2);
         MsgView rtv_2_2 = mTabLayout_2.getMsgView(2);
         if (rtv_2_2 != null) {
             UnreadMsgUtils.setSize(rtv_2_2, dp2px(7.5f));
         }
 
         //设置未读消息背景
-        mTabLayout_2.showMsg(3, 5);
+       mTabLayout_2.showMsg(3, 5);
         mTabLayout_2.setMsgMargin(3, 0, 5);
         MsgView rtv_2_3 = mTabLayout_2.getMsgView(3);
         if (rtv_2_3 != null) {
@@ -112,7 +117,7 @@ public class CommonTabActivity extends AppCompatActivity {
             @Override
             public void onTabReselect(int position) {
                 if (position == 0) {
-                    mTabLayout_2.showMsg(0, mRandom.nextInt(100) + 1);
+                   // mTabLayout_2.showMsg(0, mRandom.nextInt(100) + 1);
 //                    UnreadMsgUtils.show(mTabLayout_2.getMsgView(0), mRandom.nextInt(100) + 1);
                 }
             }
@@ -121,11 +126,12 @@ public class CommonTabActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                System.out.println("scrolled");
             }
 
             @Override
             public void onPageSelected(int position) {
+                System.out.println("page selected");
                 mTabLayout_2.setCurrentTab(position);
             }
 
@@ -135,7 +141,7 @@ public class CommonTabActivity extends AppCompatActivity {
             }
         });
 
-        mViewPager.setCurrentItem(1);
+        mViewPager.setCurrentItem(0);
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
