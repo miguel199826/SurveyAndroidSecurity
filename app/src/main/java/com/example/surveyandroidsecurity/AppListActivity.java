@@ -1,6 +1,8 @@
 package com.example.surveyandroidsecurity;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.View;
 
 import com.dueeeke.tablayout.CommonTabLayout;
@@ -24,7 +27,7 @@ public class AppListActivity extends AppCompatActivity {
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
 
-    private String[] mTitles = {"Social", "Juegos", "Multimedia", "Productividad","Otros"};
+    private String[] mTitles = {"Social", "Entretenimiento", "Multimedia", "Productividad","Otros"};
     private int[] mIconUnselectIds = {
             R.drawable.ic_u_social_icon, R.drawable.ic_u_games_icon,
             R.drawable.ic_u_multimedia_icon, R.drawable.ic_u_office_icon,R.drawable.ic_u_games_icon};
@@ -42,12 +45,11 @@ public class AppListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_common_tab);
 
-
-            mFragments.add(UserAppsFragment.getInstance( "UserApps"));
-        mFragments.add(SystemAppsFragment.getInstance( "SystemApps"));
-        mFragments.add(SystemAppsFragment.getInstance( "SystemApps"));
-        mFragments.add(SystemAppsFragment.getInstance( "SystemApps"));
-        mFragments.add(SystemAppsFragment.getInstance( "SystemApps"));
+        mFragments.add(UserAppsFragment.getInstance( 0));
+        mFragments.add(UserAppsFragment.getInstance( 1));
+        mFragments.add(UserAppsFragment.getInstance( 2));
+        mFragments.add(UserAppsFragment.getInstance( 3));
+        mFragments.add(UserAppsFragment.getInstance( 4));
 
            // mFragments2.add(SimpleCardFragment.getInstance("Switch Fragment " + title));
 
@@ -58,6 +60,11 @@ public class AppListActivity extends AppCompatActivity {
         }
 
         mDecorView = getWindow().getDecorView();
+
+        Display display = getWindowManager().getDefaultDisplay();
+
+        display.getHeight();
+        System.out.println("tamaño de pantalla"+display.getHeight());
         mViewPager = ViewFindUtils.find(mDecorView, R.id.vp_2);
 
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -30,7 +31,7 @@ import java.util.List;
 @SuppressLint("ValidFragment")
 public class UserAppsFragment extends Fragment {
     private String mTitle;
-    int nts=0;
+    private int nts=0;
 
 
 
@@ -49,9 +50,11 @@ public class UserAppsFragment extends Fragment {
     public UserAppsFragment() {
     }
 
-    public static UserAppsFragment getInstance(String title) {
+    public static UserAppsFragment getInstance(int t) {
 
         UserAppsFragment sf = new UserAppsFragment();
+        sf.nts=t;
+
        // sf.mTitle = title;
         return sf;
     }
@@ -68,16 +71,17 @@ public class UserAppsFragment extends Fragment {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private List<AppList> getInstalledApps() {
         PackageManager pm = getActivity().getApplicationContext().getPackageManager();
         List<AppList> apps = new ArrayList<AppList>();
         List<PackageInfo> packs =getActivity().getApplicationContext().getPackageManager().getInstalledPackages(0);
         //List<PackageInfo> packs = getPackageManager().getInstalledPackages(PackageManager.GET_PERMISSIONS);
-
-
+        switch (nts){
+            case 0:
                 for (int i = 0; i < packs.size(); i++) {
                     PackageInfo p = packs.get(i);
-                    if ((!isSystemPackage(p))) {
+                    if (p.applicationInfo.category==ApplicationInfo.CATEGORY_SOCIAL) {
                         String appName = p.applicationInfo.loadLabel(getContext().getPackageManager()).toString();
                         Drawable icon = p.applicationInfo.loadIcon(getContext().getPackageManager());
                         String packages = p.applicationInfo.packageName;
@@ -85,11 +89,68 @@ public class UserAppsFragment extends Fragment {
                         apps.add(new AppList(appName,icon,"---",packages));
 
                     }
-
                 }
+                break;
+            case 1:
+                for (int i = 0; i < packs.size(); i++) {
+                    PackageInfo p = packs.get(i);
+                    if (p.applicationInfo.category==ApplicationInfo.CATEGORY_GAME || p.applicationInfo.category==ApplicationInfo.CATEGORY_VIDEO || p.applicationInfo.category==ApplicationInfo.CATEGORY_NEWS ) {
+                        String appName = p.applicationInfo.loadLabel(getContext().getPackageManager()).toString();
+                        Drawable icon = p.applicationInfo.loadIcon(getContext().getPackageManager());
+                        String packages = p.applicationInfo.packageName;
+                        System.out.println(icon+":  "+packages);
+                        apps.add(new AppList(appName,icon,"---",packages));
+
+                    }
+                }
+                break;
+            case 2:
+                for (int i = 0; i < packs.size(); i++) {
+                    PackageInfo p = packs.get(i);
+                    if (p.applicationInfo.category==ApplicationInfo.CATEGORY_VIDEO || p.applicationInfo.category==ApplicationInfo.CATEGORY_AUDIO || p.applicationInfo.category==ApplicationInfo.CATEGORY_IMAGE) {
+                        String appName = p.applicationInfo.loadLabel(getContext().getPackageManager()).toString();
+                        Drawable icon = p.applicationInfo.loadIcon(getContext().getPackageManager());
+                        String packages = p.applicationInfo.packageName;
+                        System.out.println(icon+":  "+packages);
+                        apps.add(new AppList(appName,icon,"---",packages));
+
+                    }
+                }
+                break;
+            case 3:
+                for (int i = 0; i < packs.size(); i++) {
+                    PackageInfo p = packs.get(i);
+                    if (p.applicationInfo.category==ApplicationInfo.CATEGORY_PRODUCTIVITY) {
+                        String appName = p.applicationInfo.loadLabel(getContext().getPackageManager()).toString();
+                        Drawable icon = p.applicationInfo.loadIcon(getContext().getPackageManager());
+                        String packages = p.applicationInfo.packageName;
+                        System.out.println(icon+":  "+packages);
+                        apps.add(new AppList(appName,icon,"---",packages));
+
+                    }
+                }
+                break;
+            case 4:
+                for (int i = 0; i < packs.size(); i++) {
+                    PackageInfo p = packs.get(i);
+                    if ((p.applicationInfo.category==ApplicationInfo.CATEGORY_UNDEFINED && !isSystemPackage(p)) || (p.applicationInfo.category==ApplicationInfo.CATEGORY_MAPS && !isSystemPackage(p))  ) {
+                        String appName = p.applicationInfo.loadLabel(getContext().getPackageManager()).toString();
+                        Drawable icon = p.applicationInfo.loadIcon(getContext().getPackageManager());
+                        String packages = p.applicationInfo.packageName;
+                        System.out.println(icon+":  "+packages);
+                        apps.add(new AppList(appName,icon,"---",packages));
+
+                    }
+                }
+                break;
 
 
 
+
+
+
+
+        }
 
 
 
@@ -101,6 +162,7 @@ public class UserAppsFragment extends Fragment {
 
         return apps;
     }
+
 
 
 
@@ -140,6 +202,7 @@ public class UserAppsFragment extends Fragment {
         }
         private class ValueFilter extends Filter {
             //Invoked in a worker thread to filter the data according to the constraint.
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 System.out.println("EL TEXTO ESCRITO ES PERFORM... "+constraint);
@@ -227,6 +290,7 @@ public class UserAppsFragment extends Fragment {
     }
 
 
+    @SuppressLint("NewApi")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
