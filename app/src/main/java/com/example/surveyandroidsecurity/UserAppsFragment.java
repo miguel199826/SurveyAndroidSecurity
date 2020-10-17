@@ -44,6 +44,7 @@ public class UserAppsFragment extends Fragment {
     private String  char1;
     private String  char2;
     private int Num;
+    ImageView imageView;
     Context contexto;
     ListView userInstalledApps;
 
@@ -71,6 +72,11 @@ public class UserAppsFragment extends Fragment {
 
 
 
+
+
+
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private List<AppList> getInstalledApps() {
         PackageManager pm = getActivity().getApplicationContext().getPackageManager();
@@ -86,7 +92,7 @@ public class UserAppsFragment extends Fragment {
                         Drawable icon = p.applicationInfo.loadIcon(getContext().getPackageManager());
                         String packages = p.applicationInfo.packageName;
                         System.out.println(icon+":  "+packages);
-                        apps.add(new AppList(appName,icon,"---",packages));
+                        apps.add(new AppList(appName,icon,"1",packages, getResources().getDrawable(R.drawable.ic_padlock_open, null)));
 
                     }
                 }
@@ -99,7 +105,7 @@ public class UserAppsFragment extends Fragment {
                         Drawable icon = p.applicationInfo.loadIcon(getContext().getPackageManager());
                         String packages = p.applicationInfo.packageName;
                         System.out.println(icon+":  "+packages);
-                        apps.add(new AppList(appName,icon,"---",packages));
+                        apps.add(new AppList(appName,icon,"1",packages,getResources().getDrawable(R.drawable.ic_padlock_open, null)));
 
                     }
                 }
@@ -112,7 +118,7 @@ public class UserAppsFragment extends Fragment {
                         Drawable icon = p.applicationInfo.loadIcon(getContext().getPackageManager());
                         String packages = p.applicationInfo.packageName;
                         System.out.println(icon+":  "+packages);
-                        apps.add(new AppList(appName,icon,"---",packages));
+                        apps.add(new AppList(appName,icon,"1",packages,getResources().getDrawable(R.drawable.ic_padlock_open, null)));
 
                     }
                 }
@@ -125,7 +131,7 @@ public class UserAppsFragment extends Fragment {
                         Drawable icon = p.applicationInfo.loadIcon(getContext().getPackageManager());
                         String packages = p.applicationInfo.packageName;
                         System.out.println(icon+":  "+packages);
-                        apps.add(new AppList(appName,icon,"---",packages));
+                        apps.add(new AppList(appName,icon,"1",packages,getResources().getDrawable(R.drawable.ic_padlock_open, null)));
 
                     }
                 }
@@ -138,7 +144,7 @@ public class UserAppsFragment extends Fragment {
                         Drawable icon = p.applicationInfo.loadIcon(getContext().getPackageManager());
                         String packages = p.applicationInfo.packageName;
                         System.out.println(icon+":  "+packages);
-                        apps.add(new AppList(appName,icon,"---",packages));
+                        apps.add(new AppList(appName,icon,"1",packages,getResources().getDrawable(R.drawable.ic_padlock_open, null)));
 
                     }
                 }
@@ -200,6 +206,8 @@ public class UserAppsFragment extends Fragment {
         public long getItemId(int position) {
             return position;
         }
+
+
         private class ValueFilter extends Filter {
             //Invoked in a worker thread to filter the data according to the constraint.
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -220,6 +228,7 @@ public class UserAppsFragment extends Fragment {
                             contacts.setIcon(listStorage.get(i).getIcon());
                             contacts.setCriticidad(listStorage.get(i).getCriticidad());
                             contacts.setPackaganame(listStorage.get(i).getPackaganame());
+                            contacts.setLock_icon(listStorage.get(i).getLock_icon());
                             filterList.add(contacts);
                         }
                     }
@@ -242,23 +251,56 @@ public class UserAppsFragment extends Fragment {
             }
         }
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            AppAdapter.ViewHolder listViewHolder;
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            final AppAdapter.ViewHolder listViewHolder;
             if (convertView == null) {
                 listViewHolder = new AppAdapter.ViewHolder();
                 convertView = layoutInflater.inflate(R.layout.appinstalled, parent, false);
                 listViewHolder.textInListView = (TextView) convertView.findViewById(R.id.list_app_name);
                 listViewHolder.imageInListView = (ImageView) convertView.findViewById(R.id.app_icon);
                 listViewHolder.CriticidadInListView = (TextView) convertView.findViewById(R.id.app_criticidad);
-                listViewHolder.PackageInListView = (TextView) convertView.findViewById(R.id.list_package_name);
+                listViewHolder.imageIconLock = (ImageView) convertView.findViewById(R.id.lock_icon);
+             //   listViewHolder.PackageInListView = (TextView) convertView.findViewById(R.id.list_package_name);
+
                 convertView.setTag(listViewHolder);
             } else {
                 listViewHolder = (AppAdapter.ViewHolder) convertView.getTag();
             }
             listViewHolder.textInListView.setText(listStorage.get(position).getName());
             listViewHolder.imageInListView.setImageDrawable(listStorage.get(position).getIcon());
+            listViewHolder.imageIconLock.setImageDrawable(listStorage.get(position).getLock_icon());
             listViewHolder.CriticidadInListView.setText(listStorage.get(position).getCriticidad());
-            listViewHolder.PackageInListView.setText(listStorage.get(position).getPackaganame());
+//            listViewHolder.PackageInListView.setText(listStorage.get(position).getPackaganame());
+            listViewHolder.imageIconLock.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    int n=Integer.parseInt( listViewHolder.CriticidadInListView.getText().toString())+1;
+                    CharSequence charSequence =n+"";
+                    if (n==6) charSequence="1";
+
+                    System.out.println("id"+  position+nts);
+
+                    Drawable d = getLockIcon(n-1);
+
+                    listViewHolder.imageIconLock.setImageDrawable(d);
+
+
+                    listViewHolder.CriticidadInListView.setText((charSequence));
+        //            TextView tv = (TextView) tempview.findViewById(R.id.number);
+      //              Integer pos = (Integer) holder.btn_plus.getTag(R.integer.btn_plus_pos);
+
+    //                int number = Integer.parseInt(tv.getText().toString()) + 1;
+  //                  tv.setText(String.valueOf(number));
+
+//                    MainActivity.modelArrayList.get(pos).setNumber(number);
+
+                }
+            } );
+
+
+           // listViewHolder.imageInListView.setOnClickListener(this);
+
+
             return convertView;
         }
         class ViewHolder {
@@ -266,10 +308,11 @@ public class UserAppsFragment extends Fragment {
             ImageView imageInListView;
             TextView CriticidadInListView;
             TextView PackageInListView;
+            ImageView imageIconLock;
         }
     }
 
-    public  void ActualizarListaApps(String packagename, int criti, int indice, String name, Drawable icon){
+    /*public  void ActualizarListaApps(String packagename, int criti, int indice, String name, Drawable icon){
         //AppList appList = new AppList(name,icon,"nivel "+ criti,packagename);
         System.out.println(" cusqui feik");
         for ( AppList apl: installedApps ){
@@ -287,8 +330,24 @@ public class UserAppsFragment extends Fragment {
                 //Appsc.add(apl);
             }
         }
-    }
+    }*/
 
+    private Drawable getLockIcon(int i){
+
+        switch (i) {
+            case 0:
+                return getResources().getDrawable(R.drawable.ic_padlock_open, null);
+            case 1:
+                return getResources().getDrawable(R.drawable.ic_padlock_close1, null);
+            case 2:
+                return getResources().getDrawable(R.drawable.ic_padlock_close2, null);
+            case 3:
+                return getResources().getDrawable(R.drawable.ic_padlock_close3, null);
+            case 4:
+                return getResources().getDrawable(R.drawable.ic_padlock_close4, null);
+        }
+        return getResources().getDrawable(R.drawable.ic_padlock_open, null);
+    }
 
     @SuppressLint("NewApi")
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -308,10 +367,21 @@ public class UserAppsFragment extends Fragment {
         System.out.println("ky"+installedAppAdapter);
         userInstalledApps.setAdapter(installedAppAdapter);
         contexto=getContext();
-        userInstalledApps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+     //   imageView = v.findViewById(R.id.app_icon);
+    /*    imageView.setOnClickListener(new ImageView.OnClickListener() {
+            public void onClick( View v) {
+                System.out.println("onClick");
+                // Do something in response to button click
+            }
+        });*/
+
+
+     /*   userInstalledApps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                final int position= adapterView.getVerticalScrollbarPosition();
+                final int position= adapterView.getPositionForView(view);
+
 
 
                // userInstalledApps.setSelection(i);
@@ -344,11 +414,17 @@ public class UserAppsFragment extends Fragment {
              //   builder.show();
 
 
-               userInstalledApps.setAdapter(installedAppAdapter);
-                userInstalledApps.setSelection(position);
+              //  userInstalledApps.setAdapter (installedAppAdapter);
+
+
 
             }
-        });
+
+
+        });*/
+
+
+
 
         return v;
     }

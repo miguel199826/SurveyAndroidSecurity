@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,12 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+
         android:padding="5dp">
         <ImageView
             android:id="@+id/app_icon"
             android:clickable="true"
+
             android:layout_width="48dp"
-            android:layout_height="48dp"/>
+            android:layout_height="48dp"
+             />
         <LinearLayout
 
             android:layout_width="match_parent"
@@ -28,18 +32,35 @@
                 android:layout_marginStart="3dp">
                 <TextView
                     android:id="@+id/list_app_name"
+                    android:clickable="true"
                     android:layout_width="220dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textColor="@color/colorAppList"
-                    android:textSize="16dp"
+                    android:textSize="18dp"
                     android:text="App Name"/>
+
+
+                <ImageView
+                    android:id="@+id/lock_icon"
+                    android:clickable="true"
+
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    />
                 <TextView
+                    android:layout_marginLeft="10dp"
                     android:id="@+id/app_criticidad"
-                    android:textAlignment="center"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_horizontal"
+
+
+
                     android:textColor="@color/colorAppList"
                     android:text="criticidad de la aplicación"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:textSize="20dp"
                     android:layout_height="wrap_content" />
 
 
@@ -49,21 +70,7 @@
             </LinearLayout>
 
 
-            <LinearLayout
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                >
-                <TextView
-                    android:id="@+id/list_package_name"
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:text="Package Name"
-                    android:textColor="@color/colorAppList"
-                    android:textSize="12dp"
-                    />
-            </LinearLayout>
 
 
 

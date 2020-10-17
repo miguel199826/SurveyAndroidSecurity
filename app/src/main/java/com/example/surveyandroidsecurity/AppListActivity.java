@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
 
@@ -19,10 +21,13 @@ import com.dueeeke.tablayout.listener.OnTabSelectListener;
 import com.dueeeke.tablayout.utils.UnreadMsgUtils;
 import com.dueeeke.tablayout.widget.MsgView;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 public class AppListActivity extends AppCompatActivity {
+
     private Context mContext = this;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
@@ -43,6 +48,8 @@ public class AppListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println( "version " +Build.VERSION.RELEASE);
+        System.out.println("version"+ getDeviceName());
         setContentView(R.layout.activity_common_tab);
 
         mFragments.add(UserAppsFragment.getInstance( 0));
@@ -108,6 +115,35 @@ public class AppListActivity extends AppCompatActivity {
         if (rtv_2_3 != null) {
             rtv_2_3.setBackgroundColor(Color.parseColor("#6D8FB0"));
         }
+    }
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+    private static String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+
+        StringBuilder phrase = new StringBuilder();
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase.append(Character.toUpperCase(c));
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+            phrase.append(c);
+        }
+
+        return phrase.toString();
     }
 
     Random mRandom = new Random();
