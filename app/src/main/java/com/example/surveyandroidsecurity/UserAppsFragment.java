@@ -36,7 +36,7 @@ public class UserAppsFragment extends Fragment {
 
 
     private List<AppList> installedApps;
-    private List<AppList> installedAppsUpdate;
+
     private ArrayList<String> Apps=new ArrayList<>();
     private List<AppList> AppsconCriticidad;
     private AppAdapter installedAppAdapter;
@@ -79,6 +79,7 @@ public class UserAppsFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private List<AppList> getInstalledApps() {
+        System.out.println("installled apps"+nts);
         PackageManager pm = getActivity().getApplicationContext().getPackageManager();
         List<AppList> apps = new ArrayList<AppList>();
         List<PackageInfo> packs =getActivity().getApplicationContext().getPackageManager().getInstalledPackages(0);
@@ -96,6 +97,7 @@ public class UserAppsFragment extends Fragment {
 
                     }
                 }
+
                 break;
             case 1:
                 for (int i = 0; i < packs.size(); i++) {
@@ -109,6 +111,7 @@ public class UserAppsFragment extends Fragment {
 
                     }
                 }
+
                 break;
             case 2:
                 for (int i = 0; i < packs.size(); i++) {
@@ -122,6 +125,7 @@ public class UserAppsFragment extends Fragment {
 
                     }
                 }
+
                 break;
             case 3:
                 for (int i = 0; i < packs.size(); i++) {
@@ -135,6 +139,7 @@ public class UserAppsFragment extends Fragment {
 
                     }
                 }
+
                 break;
             case 4:
                 for (int i = 0; i < packs.size(); i++) {
@@ -148,6 +153,7 @@ public class UserAppsFragment extends Fragment {
 
                     }
                 }
+
                 break;
 
 
@@ -277,6 +283,8 @@ public class UserAppsFragment extends Fragment {
                     int n=Integer.parseInt( listViewHolder.CriticidadInListView.getText().toString())+1;
                     CharSequence charSequence =n+"";
                     if (n==6) charSequence="1";
+                    UpateLists(nts,position ,new AppList(installedApps.get(position).getName(),installedApps.get(position).getIcon(),n+"",installedApps.get(position).getPackaganame(),null));
+
 
                     System.out.println("id"+  position+nts);
 
@@ -361,10 +369,11 @@ public class UserAppsFragment extends Fragment {
         userInstalledApps = (ListView) v.findViewById(R.id.LVApp);
         System.out.println("ky"+userInstalledApps);
         installedApps = getInstalledApps();
-        installedAppsUpdate = getInstalledApps();
+      //  AppListActivity.installedAppsUpdate.clear();
+       // AppListActivity.installedAppsUpdate=getInstalledApps();
+       // installedAppsUpdate = getInstalledApps();
         installedAppAdapter = new AppAdapter(getContext(), installedApps);
-        System.out.println("linares .i." + installedApps.size());
-        System.out.println("ky"+installedAppAdapter);
+
         userInstalledApps.setAdapter(installedAppAdapter);
         contexto=getContext();
 
@@ -428,4 +437,40 @@ public class UserAppsFragment extends Fragment {
 
         return v;
     }
+
+
+    public void UpateLists(int categoria, int posicion, AppList appList){
+        switch (categoria){
+            case 0:
+                AppListActivity.installedAppsSicial.remove(posicion);
+                AppListActivity.installedAppsSicial.add(posicion, appList);
+                return;
+
+            case 1:
+                AppListActivity.installedAppsEntret.remove(posicion);
+                AppListActivity.installedAppsEntret.add(posicion,appList);
+                return;
+
+            case 2:
+                AppListActivity.installedAppsmultimedia.remove(posicion);
+                AppListActivity.installedAppsmultimedia.add(posicion,appList);
+                return;
+            case 3:
+                AppListActivity.installedAppsPoductividad.remove(posicion);
+                AppListActivity.installedAppsPoductividad.add(posicion,appList);
+                return;
+            case 4:
+                AppListActivity.installedAppsotros.remove(posicion);
+                AppListActivity.installedAppsotros.add(posicion,appList);
+                return;
+
+
+
+
+        }
+
+
+    }
+
+
 }
