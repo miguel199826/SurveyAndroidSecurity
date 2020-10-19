@@ -258,12 +258,23 @@ public class AppListActivity extends AppCompatActivity {
 
     }
     public void sendList(View view){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+
 
         switch (mViewPager.getCurrentItem()){
 
             case 0:
                 for ( AppList appList : installedAppsSicial){
-                System.out.println("Lista de aplicaciones SOCIAL "+appList.getName() + ""+ appList.getCriticidad());
+
+
+                    uploadData( DNI, appList.getName(),appList.getPackaganame(), appList.getCriticidad());
+
+
+              //  System.out.println("Lista de aplicaciones SOCIAL "+appList.getName() + ""+ appList.getCriticidad());
 
                 }
                 break;
@@ -271,7 +282,8 @@ public class AppListActivity extends AppCompatActivity {
             case 1:
 
             for ( AppList appList : installedAppsEntret){
-            System.out.println("Lista de aplicaciones ENTRETENIMIENTO "+appList.getName() + ""+ appList.getCriticidad());
+                uploadData( DNI, appList.getName(),appList.getPackaganame(), appList.getCriticidad());
+           // System.out.println("Lista de aplicaciones ENTRETENIMIENTO "+appList.getName() + ""+ appList.getCriticidad());
 
 
         }
@@ -282,7 +294,8 @@ public class AppListActivity extends AppCompatActivity {
 
 
         for ( AppList appList : installedAppsmultimedia){
-            System.out.println("Lista de aplicaciones MULTIMEDIA "+appList.getName() + ""+ appList.getCriticidad());
+            uploadData( DNI, appList.getName(),appList.getPackaganame(), appList.getCriticidad());
+           // System.out.println("Lista de aplicaciones MULTIMEDIA "+appList.getName() + ""+ appList.getCriticidad());
 
 
         }
@@ -292,7 +305,8 @@ public class AppListActivity extends AppCompatActivity {
 
 
         for ( AppList appList : installedAppsPoductividad){
-            System.out.println("Lista de aplicaciones PRODUCTIVIDAD "+appList.getName() + ""+ appList.getCriticidad());
+            uploadData( DNI, appList.getName(),appList.getPackaganame(), appList.getCriticidad());
+           // System.out.println("Lista de aplicaciones PRODUCTIVIDAD "+appList.getName() + ""+ appList.getCriticidad());
 
 
         }
@@ -302,7 +316,8 @@ public class AppListActivity extends AppCompatActivity {
 
             case 4:
         for ( AppList appList : installedAppsotros){
-            System.out.println("Lista de aplicaciones OTROS"+appList.getName() + ""+ appList.getCriticidad());
+            uploadData( DNI, appList.getName(),appList.getPackaganame(), appList.getCriticidad());
+           // System.out.println("Lista de aplicaciones OTROS"+appList.getName() + ""+ appList.getCriticidad());
 
 
         }
@@ -314,6 +329,8 @@ public class AppListActivity extends AppCompatActivity {
        // System.out.println("LISTA DE APLICACIONES "+AppListActivity.installedAppsUpdate);
 
 
+            }
+        }).start();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -419,7 +436,58 @@ public class AppListActivity extends AppCompatActivity {
         return (pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
     }
 
+    public String uploadData(String id, String appName, String packagename, String criticidad)  {
+        String scripurl="https://ciet.pe/guardarNivelApps.php";
+        String resultado="";
+        try{
+            URL url= new URL(scripurl);
+            HttpURLConnection httpURLConnection=(HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setDoOutput(true);
+            OutputStream outputStream=httpURLConnection.getOutputStream();
 
+            BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+
+
+
+
+            String data = URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode(id, "UTF-8")
+                    + "&" + URLEncoder.encode("appName", "UTF-8") + "=" + URLEncoder.encode(appName, "UTF-8")
+                    + "&" + URLEncoder.encode("packagename", "UTF-8") + "=" + URLEncoder.encode(packagename , "UTF-8")
+                    + "&" + URLEncoder.encode("nivel", "UTF-8") + "=" + URLEncoder.encode(criticidad, "UTF-8");
+
+            bufferedWriter.write(data);
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            outputStream.close();
+
+
+            InputStream inputStream = httpURLConnection.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            StringBuilder stringBuilder = new StringBuilder();
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+
+            }
+
+            resultado = stringBuilder.toString();
+
+
+
+
+            bufferedReader.close();
+            inputStream.close();
+            httpURLConnection.disconnect();
+        }catch (Exception e){
+
+            System.out.println("4564513132666 gg  "+e+resultado);
+        }
+
+
+        return resultado;
+    }
 
     public String uploadData(String id, String nombre, String DNI, String version_android, String modelo, String cpu, String ram, String memoria, String bateria) throws IOException {
         String scripurl="https://ciet.pe/guardardataDispositivo.php";
