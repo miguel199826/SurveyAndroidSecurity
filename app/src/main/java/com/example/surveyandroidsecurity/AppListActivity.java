@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.dueeeke.tablayout.CommonTabLayout;
@@ -331,6 +332,7 @@ public class AppListActivity extends AppCompatActivity {
 
             }
         }).start();
+        Toast.makeText(this, "Datos guardados", Toast.LENGTH_LONG).show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
